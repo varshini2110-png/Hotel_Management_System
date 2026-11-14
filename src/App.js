@@ -1,24 +1,24 @@
-import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import ListPage from './pages/ListPage';
-import DetailPage from './pages/DetailPage';
-import ManagePage from './pages/ManagePage';
-import AdminDashboard from './pages/AdminDashboard';
-import MyBookingsPage from './pages/MyBookingsPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import AdminLoginPage from './pages/AdminLoginPage';
-import WishlistPage from './pages/WishlistPage';
-import Footer from './components/Footer';
-import './App.css';
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import ListPage from "./pages/ListPage";
+import DetailPage from "./pages/DetailPage";
+import ManagePage from "./pages/ManagePage";
+import AdminDashboard from "./pages/AdminDashboard";
+import MyBookingsPage from "./pages/MyBookingsPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import AdminLoginPage from "./pages/AdminLoginPage";
+import WishlistPage from "./pages/WishlistPage";
+import Footer from "./components/Footer";
+import "./App.css";
 
 function App() {
   const location = useLocation();
 
   const isAdminPage =
-    location.pathname.startsWith('/admin') ||
-    location.pathname.startsWith('/add-hotel') ||
-    location.pathname.startsWith('/edit-hotel');
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/add-hotel") ||
+    location.pathname.startsWith("/edit-hotel");
 
   return (
     <>
