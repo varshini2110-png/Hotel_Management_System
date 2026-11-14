@@ -100,4 +100,5 @@ INSERT INTO hotels (title, description, price, latitude, longitude, image) VALUE
 ('The Taj Mahal Palace, Mumbai', 'Iconic sea-facing luxury heritage hotel overlooking the Gateway of India with world-class dining and spa.', 18500, '18.9217', '72.8332', 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'),
 ('ITC Grand Chola, Chennai', 'Palatial luxury hotel in Guindy featuring grand Chola architecture, fine dining restaurants, and lush pools.', 12000, '13.0108', '80.2206', 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800'),
 ('The Leela Palace, Bengaluru', 'Opulent garden palace hotel inspired by Mysore architecture with serene lagoons and luxury suites.', 15500, '12.9606', '77.6484', 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800'),
-('Rambagh Palace, Jaipur', 'Former royal residence offering regal suites, peacock gardens, and authentic Rajasthani hospitality.', 24000, '26.8980', '75.8081', 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800');
+('Rambagh Palace, Jaipur', 'Former royal residence offering regal suites, peacock gardens, and authentic Rajasthani hospitality.', 24000, '26.8980', '75.8081', 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'); 
+```
