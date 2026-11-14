@@ -1,70 +1,88 @@
-# Getting Started with Create React App
+# HotelSphere — Full-Stack Hotel Booking & Management Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+HotelSphere is a full-stack web application built with **React (Redux Toolkit)**, **Node.js / Express**, and **PostgreSQL (native SQL queries)**. It provides customers with property browsing, search and budget filtering, wishlists, and instant room reservations, alongside an admin dashboard for full hotel CRUD operations and local image uploads.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Tech Stack
 
-### `npm start`
+- **Frontend:** React, Redux Toolkit, React Router, React Helmet, Custom CSS
+- **Backend:** Node.js, Express.js, Multer (local server image storage)
+- **Database:** PostgreSQL (`pg` native SQL queries without an ORM)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Key Features
 
-### `npm test`
+### Customer Portal
+- **Browse & Filter Stays:** Search properties by title/destination and filter by minimum and maximum budget (`₹`) with server-side pagination (`LIMIT` / `OFFSET`).
+- **Property Details & Location:** View property descriptions, pricing, and embedded location maps.
+- **Instant Reservations:** Book stays with check-in/check-out date validation, guest/room counts, automatic night/price calculation, and booking cancellation.
+- **Personal Wishlist:** Save and toggle favorite properties synced with PostgreSQL.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Admin Portal
+- **Property Management (CRUD):** Add new hotels, edit existing details, and delete listings.
+- **Local Image Uploads:** Upload property images stored directly on the Node.js server (`/uploads`) with automatic file cleanup upon deletion.
+- **Booking Overview:** View and manage customer reservations.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Demo Credentials
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Admin Login URL:** `/admin-login`
+- **Admin Email:** `admin@hotelsphere.com`
+- **Admin Password:** `admin123`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+*(Customer accounts can be created directly from the `/register` page.)*
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Database Setup (PostgreSQL)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Create a PostgreSQL database and run the following SQL statements to set up the required tables:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(30) DEFAULT 'customer'
+);
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+CREATE TABLE hotels (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  description TEXT NOT NULL,
+  price NUMERIC(10, 2) NOT NULL,
+  latitude VARCHAR(50) NOT NULL,
+  longitude VARCHAR(50) NOT NULL,
+  image TEXT
+);
 
-## Learn More
+CREATE TABLE bookings (
+  id VARCHAR(50) PRIMARY KEY,
+  hotel_id INTEGER REFERENCES hotels(id) ON DELETE SET NULL,
+  hotel_title VARCHAR(200) NOT NULL,
+  guest_name VARCHAR(100) NOT NULL,
+  user_email VARCHAR(150) NOT NULL,
+  phone VARCHAR(20),
+  check_in VARCHAR(30) NOT NULL,
+  check_out VARCHAR(30) NOT NULL,
+  guests INTEGER DEFAULT 1,
+  rooms INTEGER DEFAULT 1,
+  total_price NUMERIC(12, 2) NOT NULL,
+  status VARCHAR(30) DEFAULT 'Confirmed',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+CREATE TABLE wishlists (
+  id SERIAL PRIMARY KEY,
+  user_email VARCHAR(150) NOT NULL,
+  hotel_id INTEGER REFERENCES hotels(id) ON DELETE CASCADE,
+  UNIQUE(user_email, hotel_id)
+);
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-- Seed Default Admin Account
+INSERT INTO users (name, email, password, role)
+VALUES ('HotelSphere Admin', 'admin@hotelsphere.com', 'admin123', 'admin');

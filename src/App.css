@@ -1,38 +1,275 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@keyframes kenBurnsContinuous {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.07) translate(-1%, -1%);
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+@keyframes heroTextReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatSubtleMotion {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes softPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(2, 132, 199, 0);
+  }
+}
+
+@keyframes sectionEnterReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.hero-banner {
+  position: relative;
+  overflow: hidden;
+  animation: sectionEnterReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: -15px;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  animation: kenBurnsContinuous 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-banner > div {
+  position: relative;
+  z-index: 1;
+  animation: heroTextReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.badge-anim {
+  display: inline-block;
+  animation: floatSubtleMotion 4s ease-in-out infinite, softPulseGlow 3s infinite;
+}
+
+.luxury-card {
   display: flex;
-  flex-direction: column;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  cursor: pointer;
+  animation: sectionEnterReveal 0.5s ease-out both;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 0.28s ease;
+  will-change: transform, box-shadow;
+}
+
+.luxury-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 34px -10px rgba(15, 23, 42, 0.14);
+  border-color: #94a3b8;
+}
+
+.hotel-image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.hotel-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.luxury-card:hover .hotel-image-wrap img {
+  transform: scale(1.09);
+}
+
+.dest-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 220px;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.dest-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+.dest-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.dest-card:hover img {
+  transform: scale(1.1);
+}
+
+button,
+.btn-action-primary {
+  transition: transform 0.18s ease, background-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+button:hover:not(:disabled),
+.btn-action-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+button:active:not(:disabled),
+.btn-action-primary:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.hs-navbar {
+  background-color: #0f172a;
+  padding: 14px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.18);
+}
+
+.hs-nav-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.hs-nav-link {
+  position: relative;
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.hs-nav-link:hover,
+.hs-nav-link.active {
+  color: #ffffff;
+}
+
+.hs-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background-color: #38bdf8;
+  transition: width 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.hs-nav-link:hover::after,
+.hs-nav-link.active::after {
+  width: 100%;
+}
+
+.center-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(5px);
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 16px;
+  z-index: 5000;
 }
 
-.App-link {
-  color: #61dafb;
+.center-modal-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 30px 26px;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.28);
+  animation: modalScaleIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.modal-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .hs-navbar {
+    padding: 12px 16px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .luxury-card {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
