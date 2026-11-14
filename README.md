@@ -12,6 +12,14 @@ HotelSphere is a full-stack web application built with **React (Redux Toolkit)**
 
 ---
 
+
+## 🎥 Project Demo Video
+
+https://drive.google.com/file/d/15Yy6twOVvFXdypuFuVdiOn5iiXJYFA0V/view?usp=drivesdk
+
+---
+
+
 ## Key Features
 
 ### Customer Portal
