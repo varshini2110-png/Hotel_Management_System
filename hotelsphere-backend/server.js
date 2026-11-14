@@ -23,6 +23,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+function isValidCoordinates(lat, lng) {
+  const latNum = Number(lat);
+  const lngNum = Number(lng);
+  if (lat === '' || lat === undefined || lat === null || Number.isNaN(latNum) || latNum < -90 || latNum > 90) {
+    return 'Latitude must be a valid coordinate between -90 and 90';
+  }
+  if (lng === '' || lng === undefined || lng === null || Number.isNaN(lngNum) || lngNum < -180 || lngNum > 180) {
+    return 'Longitude must be a valid coordinate between -180 and 180';
+  }
+  return null;
+}
+
 app.get('/api/hotels', async (req, res) => {
   try {
     const { page = 1, limit = 4, search = '', minPrice = '', maxPrice = '' } = req.query;
@@ -83,13 +95,17 @@ app.get('/api/hotels/:id', async (req, res) => {
 app.post('/api/hotels', upload.single('image'), async (req, res) => {
   try {
     const { title, description, price, latitude, longitude, imageUrl } = req.body;
-    if (!title || !description || !price || !latitude || !longitude) {
+    if (!title || !description || !price || latitude === undefined || longitude === undefined) {
       return res.status(400).json({ error: 'All hotel fields are required' });
+    }
+    const coordError = isValidCoordinates(latitude, longitude);
+    if (coordError) {
+      return res.status(400).json({ error: coordError });
     }
     const image = req.file ? `/uploads/${req.file.filename}` : imageUrl || '';
     const result = await pool.query(
       'INSERT INTO hotels (title, description, price, latitude, longitude, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [title, description, price, latitude, longitude, image]
+      [title, description, price, Number(latitude), Number(longitude), image]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -100,8 +116,12 @@ app.post('/api/hotels', upload.single('image'), async (req, res) => {
 app.put('/api/hotels/:id', upload.single('image'), async (req, res) => {
   try {
     const { title, description, price, latitude, longitude, imageUrl } = req.body;
+    const coordError = isValidCoordinates(latitude, longitude);
+    if (coordError) {
+      return res.status(400).json({ error: coordError });
+    }
     let query = 'UPDATE hotels SET title=$1, description=$2, price=$3, latitude=$4, longitude=$5';
-    let params = [title, description, price, latitude, longitude];
+    let params = [title, description, price, Number(latitude), Number(longitude)];
 
     if (req.file) {
       params.push(`/uploads/${req.file.filename}`);
